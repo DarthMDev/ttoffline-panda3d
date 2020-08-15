@@ -7,7 +7,7 @@ import sys
 if sys.version_info >= (3, 0):
     from pickle import dumps, loads
 else:
-    from cPickle import dumps, loads
+    from pickle import dumps, loads
 
 
 class NetMessenger(Messenger):

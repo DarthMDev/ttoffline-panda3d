@@ -186,7 +186,7 @@ class ServerRepository:
                 if hasattr(module, "__all__"):
                     importSymbols = module.__all__
                 else:
-                    importSymbols = module.__dict__.keys()
+                    importSymbols = list(module.__dict__.keys())
 
             for symbolName in importSymbols:
                 if hasattr(module, symbolName):
@@ -612,7 +612,7 @@ class ServerRepository:
             else:
                 self.zonesToClients[zoneId].remove(client)
 
-        for object in client.objectsByDoId.values():
+        for object in list(client.objectsByDoId.values()):
             #create and send delete message
             datagram = NetDatagram()
             datagram.addUint16(OBJECT_DELETE_CMU)
@@ -689,7 +689,7 @@ class ServerRepository:
     def clientHardDisconnectTask(self, task):
         """ client did not tell us he was leaving but we lost connection to
         him, so we need to update our data and tell others """
-        for client in self.clientsByConnection.values():
+        for client in list(self.clientsByConnection.values()):
             if not self.qcr.isConnectionOk(client.connection):
                 self.handleClientDisconnect(client)
         return Task.cont
@@ -720,7 +720,7 @@ class ServerRepository:
                 "ServerRepository sending to all except %s:" % ([c.doIdBase for c in exceptionList],))
             #datagram.dumpHex(ostream)
 
-        for client in self.clientsByConnection.values():
+        for client in list(self.clientsByConnection.values()):
             if client not in exceptionList:
                 if self.notify.getDebug():
                     self.notify.debug(

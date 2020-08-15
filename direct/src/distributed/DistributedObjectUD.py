@@ -57,7 +57,7 @@ class DistributedObjectUD(DistributedObjectBase):
             """
             spaces = ' ' * (indent + 2)
             try:
-                print("%s%s:" % (' ' * indent, self.__class__.__name__))
+                print(("%s%s:" % (' ' * indent, self.__class__.__name__)))
 
                 flags = []
                 if self.__generated:
@@ -69,10 +69,10 @@ class DistributedObjectUD(DistributedObjectBase):
                 if len(flags):
                     flagStr = " (%s)" % (" ".join(flags))
 
-                print("%sfrom DistributedObject doId:%s, parent:%s, zone:%s%s" % (
-                    spaces, self.doId, self.parentId, self.zoneId, flagStr))
+                print(("%sfrom DistributedObject doId:%s, parent:%s, zone:%s%s" % (
+                    spaces, self.doId, self.parentId, self.zoneId, flagStr)))
             except Exception as e:
-                print("%serror printing status %s" % (spaces, e))
+                print(("%serror printing status %s" % (spaces, e)))
 
     def getDeleteEvent(self):
         # this is sent just before we get deleted
@@ -122,7 +122,7 @@ class DistributedObjectUD(DistributedObjectBase):
                 self._DOUD_requestedDelete = False
 
                 # Clean up all the pending barriers.
-                for barrier in self.__barriers.values():
+                for barrier in list(self.__barriers.values()):
                     barrier.cleanup()
                 self.__barriers = {}
 
@@ -391,7 +391,7 @@ class DistributedObjectUD(DistributedObjectBase):
         # database.
 
         dclass = self.dclass
-        for key, value in valDict.items():
+        for key, value in list(valDict.items()):
             # Update the field
             dclass.directUpdate(self, key, value)
 
@@ -453,7 +453,7 @@ class DistributedObjectUD(DistributedObjectBase):
         # clients.  This lists all of the current outstanding barriers
         # and the avIds waiting for them.
         data = []
-        for context, barrier in self.__barriers.items():
+        for context, barrier in list(self.__barriers.items()):
             toons = barrier.pendingToons
             if toons:
                 data.append((context, barrier.name, toons))
